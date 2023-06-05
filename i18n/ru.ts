@@ -16,4 +16,5 @@ export default {
     authors: 'Об авторах',
     quitGame: 'Выход из игры',
     pieceOfCake: 'О, это просто !',
+    gameStart: 'Начать игру !',
 }

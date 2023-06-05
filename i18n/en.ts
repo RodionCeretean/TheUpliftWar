@@ -16,4 +16,5 @@ export default {
     authors: 'About the authors',
     quitGame: 'Quit the game',
     pieceOfCake: 'Piece of cake !',
+    gameStart: 'Start the game !',
 }

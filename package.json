@@ -15,5 +15,12 @@
     "autoprefixer": "^10.4.14",
     "nuxt": "^3.5.2",
     "sass": "^1.62.1"
+  },
+  "overrides": {
+    "vue": "latest"
+  },
+  "dependencies": {
+    "@pinia/nuxt": "^0.4.11",
+    "pinia": "^2.1.3"
   }
 }

@@ -16,7 +16,9 @@
                 class="text-yellow-500 font-medium text-2xl mt-2 relative"
                 v-for="(item, key) in menuItems.items"
             >
-                <span class="absolute right-40">{{ key }}</span> <span class="relative">-</span> <span class="text-yellow-200 absolute left-40">{{ item }}</span>
+                <span class="absolute right-48">{{ key }}</span>
+                <span class="relative" :class="{'right-8': language === 'en', 'right-6': language === 'ru' }">-</span>
+                <span class="text-yellow-200 absolute" :class="{'left-32': language === 'en', 'left-36': language === 'ru' }">{{ item }}</span>
             </li>
         </ul>
     </GameContext>
@@ -24,7 +26,7 @@
 
 <script setup lang="ts">
     import GameContext from "~/layouts/GameContext.vue";
-    defineProps(['menuItems', 'itemsAreArray', 'itemsAreObject'])
+    defineProps(['menuItems', 'itemsAreArray', 'itemsAreObject', 'language'])
     
     const selectedItem = ref(0)
 </script>

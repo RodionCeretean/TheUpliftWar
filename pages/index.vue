@@ -1,48 +1,72 @@
 <template>
-    <div class="text-center h-full bg-black/75 flex flex-col items-center">
-        <h1 class="font-['Smash_Wall'] bg-[url('/images/brick.jpg')] bg-clip-text text-transparent">{{ $t('gameTitle') }}</h1>
-        <GameMenu :menuItems="playersSelection" :itemsAreObject="true"/>
-        <GameMenu :menuItems="menuItems" :itemsAreArray="true" class="p-8 selection"/>
-        <p class="text-red-300 absolute right-14 bottom-14 text-4xl font-bold italic">{{ $t('pieceOfCake') }}</p>
+    <LanguageSwitcher/>
+    <div class="text-center h-full bg-black/75 flex flex-col items-center justify-center">
+        <h1
+            :style="{ fontFamily: languageStore.language === 'en' ? 'Smash Wall' : 'Impact'}"
+            class="bg-[url('/images/brick.jpg')] bg-clip-text text-transparent relative bottom-28"
+        >
+            {{ $t('gameTitle') }}
+        </h1>
+        <button class="
+        p-5
+        bg-white/25
+        rounded font-['Impact']
+        text-red-800
+        font-medium
+        text-2xl
+        opacity-50
+        hover:opacity-100
+        hover:text-red-600
+        hover:border-2
+        border-t-white/50
+        border-l-white/50
+        border-b-black
+        border-r-black
+        active:border-b-white/25
+        active:border-r-white/25
+        active:border-t-black
+        active:border-l-black
+        group
+        mt-1
+        hover:mt-0
+"
+        ><span class="relative group-active:top-0.5 group-active:left-0.5 tracking-wide">{{ $t('gameStart') }}</span>
+        </button>
     </div>
 </template>
 
 <script setup lang="ts">
-    import GameMenu from "~/components/GameMenu.vue"
+    import {useLanguageStore} from "~/stores/LanguageStore";
+    import {storeToRefs} from "pinia";
     
     onMounted(setInnerWidth)
     onMounted(() => window.addEventListener('resize', setInnerWidth))
     
+    const languageStore = useLanguageStore()
+    const {language} = storeToRefs(languageStore)
+    const titleInitialSize = ref('13.5rem')
     const titleWidthReduction = ref('0')
     const appInnerWidth = ref(0)
-    const playersSelection = {
-        title: _('kingdomAndPlayers'),
-        items: {
-            [_('stars')]: _('human'),
-            [_('dark')]: _('computer'),
-            [_('air')]: _('no'),
-            [_('light')]: _('no')
-        }
-    }
-    const menuItems = {
-        title: _('timeToChoose'),
-        items: [_('newGame'), _('tournament'), _('loadSave'), _('bestConquerors'), _('authors'), _('quitGame')]
-    }
     
-    function setInnerWidth() {
+    function setInnerWidth(): void {
         appInnerWidth.value = window.innerWidth
     }
     
-    function setTitleWidthReduction() {
-        titleWidthReduction.value = (1920 - appInnerWidth.value) / 8.75 + 'px'
+    function setTitleWidthReduction(): void {
+        if (languageStore.language === 'en') {
+            titleInitialSize.value = '13.5rem'
+            titleWidthReduction.value = (1920 - appInnerWidth.value) / 8.75 + 'px'
+        } else if (languageStore.language === 'ru') {
+            titleInitialSize.value = '11.5rem'
+            titleWidthReduction.value = (1920 - appInnerWidth.value) / 10 + 'px'
+        }
     }
     
-    watch(appInnerWidth, setTitleWidthReduction)
-
+    watch([appInnerWidth, language], setTitleWidthReduction)
 </script>
 
 <style scoped lang="scss">
 h1 {
-    font-size: calc(13.5rem - v-bind(titleWidthReduction));
+    font-size: calc(v-bind(titleInitialSize) - v-bind(titleWidthReduction));
 }
 </style>
