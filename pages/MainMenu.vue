@@ -1,11 +1,6 @@
 <template>
+    <LanguageSwitcher/>
     <div class="text-center h-full bg-black/75 flex flex-col items-center">
-        <h1
-            :style="{ fontFamily: language === 'en' ? 'Smash Wall' : 'Impact'}"
-            class="bg-[url('/images/brick.jpg')] bg-clip-text text-transparent"
-        >
-            {{ $t('gameTitle') }}
-        </h1>
         <GameMenu :language="language" :menuItems="playersSelection" :itemsAreObject="true"/>
         <GameMenu :menuItems="menuItems" :itemsAreArray="true" class="p-8 selection"/>
         <p class="text-red-300 absolute right-14 bottom-14 text-4xl font-bold italic">{{ $t('pieceOfCake') }}</p>

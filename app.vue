@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen bg-[url('/images/StoneBackground.jpg')]">
+    <div class="h-screen min-h-[320px] bg-[url('/images/StoneBackground.jpg')]">
         <NuxtLayout>
             <NuxtPage/>
         </NuxtLayout>
@@ -7,15 +7,19 @@
 </template>
 
 <script setup lang="ts">
-    import {_} from "~/composables/translation";
     import {storeToRefs} from "pinia";
     import {useLanguageStore} from "~/stores/LanguageStore";
-
-    useSeoMeta({title: _('gameTitle')})
+    
+    // onBeforeMount(() => navigateTo('/'))
     
     const languageStore = useLanguageStore()
     const {locale} = useI18n()
     const {language} = storeToRefs(languageStore)
+    const metaTitle = computed(():string => languageStore.language === 'en' ? 'The Uplift War' : 'Война за возвышение')
+    
+    useSeoMeta({
+        title: () => metaTitle.value
+    })
     
     function changeLanguage(lang: string): void {
         locale.value = lang
