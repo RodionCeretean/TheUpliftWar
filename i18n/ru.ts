@@ -30,5 +30,6 @@ export default {
     ratio: 'Соотношение',
     gameDifficultyLevel: 'Уровень сложности игры',
     lifeIsHard: 'Однако, жизнь трудна !',
-    youWillBeKilled: 'Вас будут убивать !'
+    youWillBeKilled: 'Вас будут убивать !',
+    exit: 'Выход'
 }

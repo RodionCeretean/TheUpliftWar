@@ -30,5 +30,6 @@ export default {
     ratio: 'Ratio',
     gameDifficultyLevel: 'Game difficulty level',
     lifeIsHard: 'However, life is hard !',
-    youWillBeKilled: 'You will be killed !'
+    youWillBeKilled: 'You will be killed !',
+    exit: 'Exit'
 }

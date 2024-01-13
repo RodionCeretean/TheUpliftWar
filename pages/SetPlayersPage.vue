@@ -20,7 +20,8 @@
             {title: 'stars', value: ''},
             {title: 'dark', value: ''},
             {title: 'air', value: ''},
-            {title: 'light', value: ''}
+            {title: 'light', value: ''},
+            {title: 'exit', value: ''}
         ]
     }
     

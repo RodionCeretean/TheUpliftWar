@@ -9,7 +9,7 @@
             >
                 <template v-if="!item.value">
                     <span @click="selectMenuItem(index)" class="sm:text-xl inline-block w-full relative">
-                       <span v-if="props.setPlayers">
+                       <span v-if="props.setPlayers && index < player.length">
                            <span class="absolute right-[55%]">{{ t(item.title) }}</span> <span>-</span> <span
                            class="absolute left-[55%]">{{ $t(player[index]) }}</span>
                        </span>
@@ -63,9 +63,13 @@
     function callFunction(index: number): void {
         if (props.difficultyMenu) difficultyMenuFunctions[index]()
         else if (props.setPlayers) {
-            const currentRole = player.value[index]
-            const nextRole = playerRoles.findIndex(role => role === currentRole) + 1
-            player.value.splice(index, 1, playerRoles[nextRole < playerRoles.length ? nextRole : 0])
+            if (index < player.value.length) {
+                const currentRole = player.value[index]
+                const nextRole = playerRoles.findIndex(role => role === currentRole) + 1
+                player.value.splice(index, 1, playerRoles[nextRole < playerRoles.length ? nextRole : 0])
+            } else {
+                goToNextMenu()
+            }
         }
         else menuFunctions[index]()
     }
@@ -107,6 +111,14 @@
     
     function quitGame() {
         router.push('/')
+    }
+    
+    function goToNextMenu() {
+        const playersNumberCheck = player.value.reduce((acc:number, val:string) => {
+            return val === 'no' ? acc + 1 : acc
+        }, 0)
+        if (playersNumberCheck > 2) console.log('Мало игроков')
+        else router.push('TroopRecruitment')
     }
     
     watch(selectedItem, newValue => emits('update:selectedItem', newValue))
