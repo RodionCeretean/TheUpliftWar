@@ -17,4 +17,18 @@ export default {
     quitGame: 'Выход из игры',
     pieceOfCake: 'О, это просто !',
     gameStart: 'Начать игру !',
+    Tupitsyn: 'при участии - Тупицына А.В.',
+    Gorbushin: 'Графика - Горбушин А.Г.',
+    Anisimov: 'Программирование - Анисимов С.Ю.',
+    originalCreators: 'Авторы оригинальной игры:',
+    mag: 'М А Г',
+    copyByStudio: 'Копия игры студии:',
+    gaiaGreatestConquerors: 'Величайшие завоеватели Геи',
+    battleIsMoreImportantThanVictory: 'Сражение важнее победы !',
+    place: 'Место',
+    name: 'Имя государя',
+    ratio: 'Соотношение',
+    gameDifficultyLevel: 'Уровень сложности игры',
+    lifeIsHard: 'Однако, жизнь трудна !',
+    youWillBeKilled: 'Вас будут убивать !'
 }

@@ -42,9 +42,15 @@
     outline-offset: 2px;
 }
 
-@media screen and (max-width: 500px) {
+@media screen and (max-width: 700px) {
     .languageSwitcher {
-       @apply z-10 fixed top-5 left-2/4 -translate-x-2/4 flex justify-center
+       @apply z-10 relative top-5 flex justify-center right-0 mb-5
+    }
+}
+
+@media (pointer: coarse) {
+    button {
+        cursor: none;
     }
 }
 </style>

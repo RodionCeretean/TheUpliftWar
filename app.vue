@@ -1,5 +1,5 @@
 <template>
-    <div class="h-screen min-h-[320px] bg-[url('/images/StoneBackground.jpg')]">
+    <div class="h-full">
         <NuxtLayout>
             <NuxtPage/>
         </NuxtLayout>
@@ -9,16 +9,16 @@
 <script setup lang="ts">
     import {storeToRefs} from "pinia";
     import {useLanguageStore} from "~/stores/LanguageStore";
+    const {t} = useI18n()
+
+    onBeforeMount(() => navigateTo('/'))
     
-    // onBeforeMount(() => navigateTo('/'))
-    
-    const languageStore = useLanguageStore()
     const {locale} = useI18n()
-    const {language} = storeToRefs(languageStore)
-    const metaTitle = computed(():string => languageStore.language === 'en' ? 'The Uplift War' : 'Война за возвышение')
+    const store = useLanguageStore()
+    const {language} = storeToRefs(store)
     
     useSeoMeta({
-        title: () => metaTitle.value
+        title: () => t('gameTitle')
     })
     
     function changeLanguage(lang: string): void {
@@ -34,6 +34,13 @@
     margin: 0;
     padding: 0;
     user-select: none;
+}
+
+body {
+    background-image: url('/images/StoneBackground.jpg');
+    //overflow: hidden;
+    //height: 100vh;
+    //max-height: 100vh;
 }
 
 @font-face {
@@ -60,5 +67,29 @@
     font-weight: normal;
     font-style: normal;
     font-display: swap;
+}
+
+@font-face {
+    font-family: 'Needleteeth';
+    src: url('/fonts/needle/NeedleteethSPRegular.eot');
+    src: url('/fonts/needle/NeedleteethSPRegular.eot') format('embedded-opentype'),
+    url('/fonts/needle/NeedleteethSPRegular.woff2') format('woff2'),
+    url('/fonts/needle/NeedleteethSPRegular.woff') format('woff'),
+    url('/fonts/needle/NeedleteethSPRegular.ttf') format('truetype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}
+
+
+
+.page-enter-active,
+.page-leave-active {
+    transition: all 0.2s ease-out;
+}
+.page-enter-from,
+.page-leave-to {
+    filter: brightness(0);
+    background-color: black;
 }
 </style>

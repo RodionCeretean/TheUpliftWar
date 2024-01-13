@@ -1,15 +1,11 @@
 import {defineStore} from "pinia";
 
-export const useLanguageStore = defineStore('LanguageStore', {
-    state: () => {
-        return {
-            language: 'en'
-        }
-    },
+export const useLanguageStore = defineStore('LanguageStore', () => {
+    const language = ref('en')
 
-    actions: {
-        changeLanguage(lang: string): void {
-            this.language = lang
-        }
+    function changeLanguage(lang: string): void {
+        language.value = lang
     }
+
+    return {language, changeLanguage}
 })

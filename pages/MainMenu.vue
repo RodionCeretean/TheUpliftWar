@@ -1,58 +1,72 @@
 <template>
-    <LanguageSwitcher/>
-    <div class="text-center h-full bg-black/75 flex flex-col items-center">
-        <GameMenu :language="language" :menuItems="playersSelection" :itemsAreObject="true"/>
-        <GameMenu :menuItems="menuItems" :itemsAreArray="true" class="p-8 selection"/>
-        <p class="text-red-300 absolute right-14 bottom-14 text-4xl font-bold italic">{{ $t('pieceOfCake') }}</p>
+    <div class="text-center min-h-screen h-full bg-black/75 flex flex-col items-center">
+        <LanguageSwitcher/>
+        <GameMenu :menuItems="playersSelection"/>
+        <GameMenu :isEnterPressed="isEnterPressed" v-model:selectedItem="selectedItem" :menuItems="menuItems" class="p-8 selection"/>
+        <p class="text-red-300 absolute right-14 bottom-14 text-4xl font-bold italic gameDifficulty">{{ $t('pieceOfCake') }}</p>
     </div>
 </template>
 
 <script setup lang="ts">
     import GameMenu from "~/components/GameMenu.vue"
+
+    onMounted(() => window.addEventListener('keyup', getKeyboardEvent))
+
+    onBeforeUnmount(() => {
+        window.removeEventListener('keyup', getKeyboardEvent)
+    })
     
-    onMounted(setInnerWidth)
-    onMounted(() => window.addEventListener('resize', setInnerWidth))
-    
-    const { locale } = useI18n()
-    const language = ref('en')
-    const titleInitialSize = ref('13.5rem')
-    const titleWidthReduction = ref('0')
-    const appInnerWidth = ref(0)
     const playersSelection = {
-        title: _('kingdomAndPlayers'),
-        items: {
-            [_('stars')]: _('human'),
-            [_('dark')]: _('computer'),
-            [_('air')]: _('no'),
-            [_('light')]: _('no')
-        }
+        title: 'kingdomAndPlayers',
+        items: [
+            {title: 'stars', value: 'human'},
+            {title: 'dark', value: 'computer'},
+            {title: 'air', value: 'no'},
+            {title: 'light', value: 'no'}
+        ]
     }
     const menuItems = {
-        title: _('timeToChoose'),
-        items: [_('newGame'), _('tournament'), _('loadSave'), _('bestConquerors'), _('authors'), _('quitGame')]
+        title: 'timeToChoose',
+        items: [
+            {title: 'newGame', value: ''},
+            {title: 'tournament', value: ''},
+            {title: 'loadSave', value: ''},
+            {title: 'bestConquerors', value: ''},
+            {title: 'authors', value: ''},
+            {title: 'quitGame', value: ''}
+        ]
     }
-    
-    function setInnerWidth() {
-        appInnerWidth.value = window.innerWidth
-    }
-    function setTitleWidthReduction() {
-        if (locale.value === 'en') {
-            language.value = 'en'
-            titleInitialSize.value = '13.5rem'
-            titleWidthReduction.value = (1920 - appInnerWidth.value) / 8.75 + 'px'
-        } else if (locale.value === 'ru') {
-            language.value = 'ru'
-            titleInitialSize.value = '11.5rem'
-            titleWidthReduction.value = (1920 - appInnerWidth.value) / 10 + 'px'
+
+    const selectedItem = ref(0)
+    const isEnterPressed = ref(false)
+
+    function getKeyboardEvent(e: KeyboardEvent): void {
+        if (e.key === 'ArrowUp') {
+            if (selectedItem.value > 0) {
+                selectedItem.value--
+            } else {
+                selectedItem.value = menuItems.items.length - 1
+            }
+        }
+        else if (e.key === 'ArrowDown') {
+            if (selectedItem.value < menuItems.items.length - 1) {
+                selectedItem.value++
+            } else {
+                selectedItem.value = 0
+            }
+        } else if (e.key === 'Enter') {
+            isEnterPressed.value = !isEnterPressed.value
         }
     }
-    
-    watch(appInnerWidth, setTitleWidthReduction)
-
 </script>
 
 <style scoped lang="scss">
-h1 {
-    font-size: calc(v-bind(titleInitialSize) - v-bind(titleWidthReduction));
+@media screen and (max-width: 700px), (max-height: 800px) {
+    .gameDifficulty {
+        position: relative;
+        right: 0;
+        bottom: 0;
+        margin-bottom: 20px;
+    }
 }
 </style>

@@ -17,4 +17,18 @@ export default {
     quitGame: 'Quit the game',
     pieceOfCake: 'Piece of cake !',
     gameStart: 'Start the game !',
+    Tupitsyn: 'with the participation of Tupitsyn A.V.',
+    Gorbushin: 'Graphics - Gorbushin A.G.',
+    Anisimov: 'Programming - Anisimov S.Y.',
+    originalCreators: 'Original game creators:',
+    mag: 'M A G',
+    copyByStudio: 'Copy of the game by the studio:',
+    gaiaGreatestConquerors: 'The Greatest Conquerors of Gaia',
+    battleIsMoreImportantThanVictory: 'The battle is more important than the victory !',
+    place: 'Place',
+    name: 'Name',
+    ratio: 'Ratio',
+    gameDifficultyLevel: 'Game difficulty level',
+    lifeIsHard: 'However, life is hard !',
+    youWillBeKilled: 'You will be killed !'
 }

@@ -1,6 +1,6 @@
 <template>
-    <LanguageSwitcher/>
-    <div class="text-center h-full bg-black/75 flex flex-col items-center justify-center">
+    <div class="text-center min-h-screen h-full bg-black/75 flex flex-col items-center justify-center">
+        <LanguageSwitcher/>
         <h1
             ref="h1ref"
             :style="h1Styles"
@@ -9,7 +9,7 @@
             {{ $t('gameTitle') }}
         </h1>
         <NuxtLink to="/MainMenu">
-            <button class="group startButton">
+            <button ref="startButton" class="group startButton">
                 <span class="relative group-active:top-0.5 group-active:left-0.5 tracking-wide">{{ $t('gameStart') }}</span>
             </button>
         </NuxtLink>
@@ -41,10 +41,18 @@
             }
         }
     })
+    
+    const startButton = ref()
     onMounted(setInnerDimensions)
     onMounted(() => window.addEventListener('resize', setInnerDimensions))
+    onMounted(() => window.addEventListener('keyup', clickStartButton))
+    onBeforeUnmount(() => window.removeEventListener('keyup', clickStartButton))
     
     const h1ref = ref()
+    
+    function clickStartButton(e: KeyboardEvent): void {
+        if (e.key === ' ') startButton.value.click()
+    }
     
     function setTitleInitialSize(newValue: number, oldValue: number): void {
         if (appInnerHeight.value <= 320) {
@@ -54,7 +62,7 @@
             if (h1ref) {
                 nextTick(() => {
                     if (newValue <= oldValue) {
-                        h1Height.value = h1ref.value.clientHeight
+                        h1Height.value = h1ref?.value?.clientHeight
                         if (languageStore.language === 'ru' && titleInitialSize.value > 11.5) {
                             titleInitialSize.value = 11.5
                             computedTitleInitialSize.value = titleInitialSize.value + 'rem'
@@ -64,7 +72,7 @@
                                 computedTitleInitialSize.value = titleInitialSize.value + 'rem'
                         }
                     } else if (newValue > oldValue) {
-                        h1Height.value = h1ref.value.clientHeight
+                        h1Height.value = h1ref?.value?.clientHeight
                         if (h1Height.value < appInnerHeight.value / 2) {
                             if (languageStore.language === 'en' && titleInitialSize.value === 13.5) {
                                 titleInitialSize.value = 13.5
@@ -119,6 +127,22 @@
 
 h1 {
     font-size: calc(v-bind(computedTitleInitialSize) - v-bind(computedTitleWidthReduction));
+}
+
+@media (hover: none) {
+    .startButton {
+        @apply opacity-100 text-red-600 border-2 mt-0
+    }
+    
+    .startButton:hover {
+        @apply opacity-100 text-red-600 border-2 mt-0
+    }
+}
+
+@media (pointer: coarse) {
+    .startButton {
+        cursor: none;
+    }
 }
 
 @media screen and (max-width: 1000px) {
