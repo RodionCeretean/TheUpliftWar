@@ -8,7 +8,15 @@
                 v-for="(item, index) in menuItems.items"
             >
                 <template v-if="!item.value">
-                    <span @click="selectMenuItem(index)" class="sm:text-xl">{{ t(item.title) }}</span>
+                    <span @click="selectMenuItem(index)" class="sm:text-xl inline-block w-full relative">
+                       <span v-if="props.setPlayers">
+                           <span class="absolute right-[55%]">{{ t(item.title) }}</span> <span>-</span> <span
+                           class="absolute left-[55%]">{{ $t(player[index]) }}</span>
+                       </span>
+                        <span v-else>
+                           <span>{{ t(item.title) }}</span>
+                       </span>
+                    </span>
                 </template>
                 <template v-else>
                     <span class="absolute right-48 kingdomPlayersTitles">{{ t(item.title) }}</span>
@@ -27,6 +35,7 @@
                 </template>
             </li>
         </ul>
+        <div v-if="props.difficultyMenu" class="text-right pt-2 text-yellow-300">{{ budget[selectedItem] + ' $' }}</div>
     </GameContext>
 </template>
 
@@ -34,14 +43,17 @@
     import {useLanguageStore} from "~/stores/LanguageStore";
     import GameContext from "~/layouts/GameContext.vue";
     
-    const props = defineProps(['menuItems', 'selectedItem', 'isEnterPressed', 'difficultyMenu'])
-    const emits = defineEmits(['update:selectedItem'])
+    const props = defineProps(['menuItems', 'selectedItem', 'isEnterPressed', 'difficultyMenu', 'setPlayers'])
+    const emits = defineEmits(['update:selectedItem', 'setDifficulty'])
     
     const selectedItem = ref(0)
     const {language} = useLanguageStore()
     const {t} = useI18n()
     const menuFunctions = [newGame, tournament, loadSave, bestConquerors, authors, quitGame]
     const difficultyMenuFunctions = [pieceOfCake, lifeIsHard, youWillBeKilled]
+    const budget = [50000, 100000, 200000]
+    const playerRoles = ['human', 'computer', 'no']
+    const player = ref(['human', 'computer', 'no', 'no'])
     const router = useRouter()
     
     function selectMenuItem(index: number): void {
@@ -49,41 +61,50 @@
     }
     
     function callFunction(index: number): void {
-        !props.difficultyMenu ? menuFunctions[index]() : difficultyMenuFunctions[index]()
+        if (props.difficultyMenu) difficultyMenuFunctions[index]()
+        else if (props.setPlayers) {
+            const currentRole = player.value[index]
+            const nextRole = playerRoles.findIndex(role => role === currentRole) + 1
+            player.value.splice(index, 1, playerRoles[nextRole < playerRoles.length ? nextRole : 0])
+        }
+        else menuFunctions[index]()
     }
     
     function pieceOfCake() {
-        console.log('pieceOfCake')
+        emits('setDifficulty', 0)
+        router.push('SetPlayersPage')
     }
     
     function lifeIsHard() {
-        console.log('lifeIsHard')
+        emits('setDifficulty', 1)
+        router.push('SetPlayersPage')
     }
     
     function youWillBeKilled() {
-        console.log('youWillBeKilled')
+        emits('setDifficulty', 2)
+        router.push('SetPlayersPage')
     }
-
+    
     function newGame() {
         router.push('GameDifficultyPage')
     }
-
+    
     function tournament() {
         console.log('tournament')
     }
-
+    
     function loadSave() {
         console.log('loadSave')
     }
-
+    
     function bestConquerors() {
         router.push('BestConquerors')
     }
-
+    
     function authors() {
         router.push('/Authors')
     }
-
+    
     function quitGame() {
         router.push('/')
     }
@@ -109,13 +130,20 @@
 .selection {
     ul {
         margin-top: 24px;
-    
+        
+        li {
+            
+            &:not(.active):hover {
+                filter: brightness(125%);
+            }
+            
+            &:is(.active):hover {
+                filter: brightness(100%);
+            }
+        }
+        
         span {
             cursor: pointer;
-        
-            &:hover {
-                opacity: 0.75;
-            }
         }
     }
     
@@ -126,8 +154,9 @@
     }
     
     .active {
-        color: rgba(255, 0, 0, 0.75);
+        color: #e72e2e;
         font-size: 2rem;
+        filter: brightness(90%);
     }
 }
 
